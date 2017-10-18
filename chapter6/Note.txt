@@ -1,0 +1,100 @@
+command in Python session:
+
+>>> import docclass
+>>> cl=docclass.classifier(docclass.getwords)
+>>> cl.train('the quick brown fox jumps over the lazy dog','good')
+>>> cl.train('make quick money in the online casino','bad')
+>>> cl.fcount('quick','good')
+>>> cl.fcount('quick','bad')
+
+>>> import imp
+>>> imp.reload(docclass)
+>>> cl=docclass.classifier(docclass.getwords)
+>>> docclass.sampletrain(cl)
+>>> cl.fprob('quick','good')
+
+>>> imp.reload(docclass)
+>>> cl=docclass.classifier(docclass.getwords)
+>>> docclass.sampletrain(cl)
+>>> cl.weightedprob('money','good',cl.fprob)
+>>> docclass.sampletrain(cl)
+>>> cl.weightedprob('money','good',cl.fprob)
+
+>>> imp.reload(docclass)
+>>> cl=docclass.naivebayes(docclass.getwords)
+>>> docclass.sampletrain(cl)
+>>> cl.prob('quick rabbit','good')
+>>> cl.prob('quick rabbit','bad')
+
+>>> imp.reload(docclass)
+>>> cl=docclass.naivebayes(docclass.getwords)
+>>> docclass.sampletrain(cl)
+>>> cl.classify('quick rabbit',default='unknown')
+>>> cl.classify('quick money',default='unknown')
+>>> cl.setthreshold('bad',3.0)
+>>> cl.classify('quick money',default='unknown')
+>>> for i in range(10): docclass.sampletrain(cl)
+>>> cl.classify('quick money',default='unknown')
+
+>>> imp.reload(docclass)
+>>> cl=docclass.fisherclassifier(docclass.getwords)
+>>> docclass.sampletrain(cl)
+>>> cl.cprob('quick','good')
+>>> cl.cprob('money','bad')
+>>> cl.weightedprob('money','bad',cl.cprob)
+
+>>> imp.reload(docclass)
+>>> cl=docclass.fisherclassifier(docclass.getwords)
+>>> docclass.sampletrain(cl)
+>>> cl.cprob('quick','good')
+>>> cl.fisherprob('quick rabbit','good')
+>>> cl.fisherprob('quick rabbit','bad')
+
+>>> imp.reload(docclass)
+>>> docclass.sampletrain(cl)
+>>> cl.classify('quick rabbit')
+>>> cl.classify('quick money')
+>>> cl.setminimum('bad',0.8)
+>>> cl.classify('quick money')
+>>> cl.setminimum('good',0.4)
+>>> cl.classify('quick money')
+
+>>> imp.reload(docclass)
+>>> cl=docclass.fisherclassifier(docclass.getwords)
+>>> cl.setdb('test1.db')
+>>> docclass.sampletrain(cl)
+>>> cl2=docclass.naivebayes(docclass.getwords)
+>>> cl2.setdb('test1.db')
+>>> cl2.classify('quick money')
+
+>>> import feedfilter
+>>> cl=docclass.fisherclassifier(docclass.getwords)
+>>> cl.setdb('python_feed.db') # Only if you implemented SQLite
+>>> feedfilter.read('python_search.xml',cl)
+
+>>> imp.reload(feedfilter)
+>>> cl=docclass.fisherclassifier(feedfilter.entryfeatures)
+>>> cl.setdb('python_feed.db') # Only if using the DB version
+>>> feedfilter.read('python_search.xml',cl)
+
+>>> import akismettest
+>>> msg='Make money fast! Online Casino!'
+>>> akismettest.isspam(msg,'spammer@spam.com','127.0.0.1')
+
+
+In the section "Using Akismet", I found that when execute the following code:
+
+>>> import akismettest
+>>> msg='Make money fast! Online Casino!'
+>>> akismettest.isspam(msg,'spammer@spam.com','127.0.0.1')
+
+I get the following results:
+
+b'valid' 200
+False
+
+(Here I set:
+
+pageurl="https://xihangalpha.wordpress.com/"
+
+)
